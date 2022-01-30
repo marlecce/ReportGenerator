@@ -37,6 +37,46 @@ public class Parser {
 
 	/**
 	 * 
+	 * @param ipOKMatches
+	 * @param statusCode
+	 * @param bytes
+	 * @param timestamp
+	 * @param ip
+	 * @param match
+	 */
+	private void addOKMatch(HashMap<String, Match> ipOKMatches, Integer statusCode, Integer bytes, String timestamp,
+			String ip, Match match) {
+		// increment ok requests
+		int tmpTotalOKRequests = match.getOKTotalRequests();
+		match.setOKTotalRequests(tmpTotalOKRequests + 1);
+
+		// increment ok bytes
+		int tmpTotalOKBytes = match.getTotalOKBytes();
+		match.setTotalOKBytes(tmpTotalOKBytes + bytes);
+
+		// update data for the last match
+		match.setStatusCode(statusCode);
+		match.setTimestamp(timestamp);
+		ipOKMatches.put(ip, match);
+	}
+
+	/**
+	 * 
+	 * @param bytes
+	 * @param match
+	 */
+	private void incrementTotals(Integer bytes, Match match) {
+		// increment the total requests
+		int tmpTotalRequests = match.getTotalRequests();
+		match.setTotalRequests(tmpTotalRequests + 1);
+
+		// increment the total bytes sent
+		int tmpTotalBytes = match.getTotalBytes();
+		match.setTotalBytes(tmpTotalBytes + bytes);
+	}
+
+	/**
+	 * 
 	 * @param fileToParse @return @throws IOException @throws
 	 */
 	public TreeSet<Match> parse(String fileToParse) throws IOException {
@@ -68,31 +108,11 @@ public class Parser {
 
 					match = ipMatches.get(ip);
 				}
-				
 
-				// increment the total requests
-				int tmpTotalRequests = match.getTotalRequests();
-				match.setTotalRequests(tmpTotalRequests + 1);
+				incrementTotals(bytes, match);
 
-				// increment the total bytes sent
-				int tmpTotalBytes = match.getTotalBytes();
-				match.setTotalBytes(tmpTotalBytes + bytes);
-
-				
-				
 				if (Integer.compare(statusCode, HTTP_STATUS_CODE_OK) == 0) {
-					// increment ok requests
-					int tmpTotalOKRequests = match.getOKTotalRequests();
-					match.setOKTotalRequests(tmpTotalOKRequests + 1);
-
-					// increment ok bytes
-					int tmpTotalOKBytes = match.getTotalOKBytes();
-					match.setTotalOKBytes(tmpTotalOKBytes + bytes);
-					
-					// update data for the last match
-					match.setStatusCode(statusCode);
-					match.setTimestamp(timestamp);
-					ipOKMatches.put(ip, match);
+					addOKMatch(ipOKMatches, statusCode, bytes, timestamp, ip, match);
 				}
 
 				// update data for the last match
