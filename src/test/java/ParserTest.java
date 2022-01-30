@@ -23,10 +23,11 @@ public class ParserTest {
 		assertTrue(set.isEmpty() == false);
 
 		assertEquals("123.45.201.225", set.first().getIp());
+		System.out.println(set.first().getStatusCode());
 		assertTrue(Integer.compare(set.first().getStatusCode(), Parser.HTTP_STATUS_CODE_OK) == 0);
-		assertEquals(new Integer(10), set.first().getOKTotalRequests());
+		assertEquals(new Integer(6), set.first().getOKTotalRequests());
 		assertEquals(new Integer(11), set.first().getTotalRequests());
-		assertEquals(new Integer(42039), set.first().getTotalOKBytes());
+		assertEquals(new Integer(25200), set.first().getTotalOKBytes());
 		assertEquals(new Integer(46278), set.first().getTotalBytes());
 
 	}

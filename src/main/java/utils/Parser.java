@@ -67,12 +67,8 @@ public class Parser {
 				} else {
 
 					match = ipMatches.get(ip);
-
-					// update data for the last match
-					match.setStatusCode(statusCode);
-					match.setTimestamp(timestamp);
-
 				}
+				
 
 				// increment the total requests
 				int tmpTotalRequests = match.getTotalRequests();
@@ -82,6 +78,8 @@ public class Parser {
 				int tmpTotalBytes = match.getTotalBytes();
 				match.setTotalBytes(tmpTotalBytes + bytes);
 
+				
+				
 				if (Integer.compare(statusCode, HTTP_STATUS_CODE_OK) == 0) {
 					// increment ok requests
 					int tmpTotalOKRequests = match.getOKTotalRequests();
@@ -90,9 +88,14 @@ public class Parser {
 					// increment ok bytes
 					int tmpTotalOKBytes = match.getTotalOKBytes();
 					match.setTotalOKBytes(tmpTotalOKBytes + bytes);
+					
+					// update data for the last match
+					match.setStatusCode(statusCode);
+					match.setTimestamp(timestamp);
 					ipOKMatches.put(ip, match);
 				}
 
+				// update data for the last match
 				ipMatches.put(ip, match);
 
 			}
