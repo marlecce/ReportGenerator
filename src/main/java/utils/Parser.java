@@ -45,7 +45,7 @@ public class Parser {
 	 * @param match
 	 */
 	private void addOKMatch(HashMap<String, Match> ipOKMatches, Integer statusCode, Integer bytes, String timestamp,
-			String ip, Match match) {
+			String ip, Match match, TreeSet<Match> set) {
 		// increment ok requests
 		int tmpTotalOKRequests = match.getOKTotalRequests();
 		match.setOKTotalRequests(tmpTotalOKRequests + 1);
@@ -58,6 +58,8 @@ public class Parser {
 		match.setStatusCode(statusCode);
 		match.setTimestamp(timestamp);
 		ipOKMatches.put(ip, match);
+		
+		set.add(match);
 	}
 
 	/**
@@ -112,7 +114,7 @@ public class Parser {
 				incrementTotals(bytes, match);
 
 				if (Integer.compare(statusCode, HTTP_STATUS_CODE_OK) == 0) {
-					addOKMatch(ipOKMatches, statusCode, bytes, timestamp, ip, match);
+					addOKMatch(ipOKMatches, statusCode, bytes, timestamp, ip, match, set);
 				}
 
 				// update data for the last match
@@ -122,8 +124,6 @@ public class Parser {
 		}
 
 		bufferedReader.close();
-
-		set.addAll(ipOKMatches.values());
 
 		return (TreeSet<Match>) set.descendingSet();
 

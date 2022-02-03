@@ -23,7 +23,7 @@ public class ParserTest {
 		assertTrue(set.isEmpty() == false);
 
 		assertEquals("123.45.201.225", set.first().getIp());
-		System.out.println(set.first().getStatusCode());
+		
 		assertTrue(Integer.compare(set.first().getStatusCode(), Parser.HTTP_STATUS_CODE_OK) == 0);
 		assertEquals(new Integer(6), set.first().getOKTotalRequests());
 		assertEquals(new Integer(11), set.first().getTotalRequests());
